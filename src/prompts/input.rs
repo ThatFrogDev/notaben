@@ -1,7 +1,11 @@
 use crate::{main, return_to_main};
 use dialoguer::{theme::ColorfulTheme, Input};
 
-pub fn single(prompt: &str, initial_text: String, is_required: bool) -> Result<String, Box<dyn std::error::Error>> {
+pub fn single(
+    prompt: &str,
+    initial_text: String,
+    is_required: bool,
+) -> Result<String, Box<dyn std::error::Error>> {
     let mut result: String;
 
     loop {

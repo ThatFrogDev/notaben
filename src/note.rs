@@ -1,6 +1,10 @@
 use crate::{
     api, multiselect,
-    prompts::{confirm::confirm, input::{single, multi}, select::select},
+    prompts::{
+        confirm::confirm,
+        input::{multi, single},
+        select::select,
+    },
     truncate_note,
     utilities::{cursor_to_origin::cursor_to_origin, display::display},
 };
