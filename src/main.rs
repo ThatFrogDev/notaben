@@ -57,14 +57,14 @@ fn display_about() -> Result<(), Box<dyn std::error::Error>> {
         "{}",
         paragraph(
             &skin,
-            "**Notabena** is a FOSS note-taking CLI tool, written in Rust.\nDonations are always a great way to help us keeping the project alive. It can be done here: https://paypal.me/Notabena (ctrl+click to follow link)."
+            "**Notabena** is a FOSS note-taking CLI tool, written in Rust."
         )
     );
     println!(
         "version: v{}, licensed under: GPL v3",
         env!("CARGO_PKG_VERSION")
     );
-    println!("COPYRIGHT (c) 2023-PRESENT NOTABENA ORGANISATION\nPROJECT LEADS @ThatFrogDev, @MrSerge01, GITHUB CONTRIBUTORS\n\n(scroll up if you can't read everything)");
+    println!("COPYRIGHT (c) 2023-PRESENT NOTABENA ORGANISATION\nAUTHOR: @ThatFrogDev, GITHUB CONTRIBUTORS\n\n(scroll up if you can't read everything)");
 
     Ok(())
 }
