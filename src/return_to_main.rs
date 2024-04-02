@@ -4,7 +4,7 @@ use crossterm::terminal::{disable_raw_mode, enable_raw_mode};
 use std::time::Duration;
 
 // very hacky way to make these values public
-pub fn return_event() -> KeyEvent {
+fn return_event() -> KeyEvent {
     KeyEvent {
         code: KeyCode::Char('q'),
         modifiers: KeyModifiers::ALT,
@@ -13,7 +13,7 @@ pub fn return_event() -> KeyEvent {
     }
 }
 
-pub fn continue_event() -> KeyEvent {
+fn continue_event() -> KeyEvent {
     KeyEvent {
         code: KeyCode::Enter,
         modifiers: KeyModifiers::NONE,
@@ -22,17 +22,17 @@ pub fn continue_event() -> KeyEvent {
     }
 }
 
-pub fn return_to_main() -> Result<KeyEvent, Box<dyn std::error::Error>> {
+pub fn return_to_main() -> Result<&'static str, Box<dyn std::error::Error>> {
     enable_raw_mode()?;
 
     loop {
         if event::poll(Duration::from_millis(1000))? {
             if let Event::Key(event) = event::read()? {
                 if event == return_event() {
-                    return Ok(return_event());
+                    return Ok("userReturned");
                 }
                 if event == continue_event() {
-                    return Ok(continue_event());
+                    return Ok("userContinued");
                 }
             }
         }

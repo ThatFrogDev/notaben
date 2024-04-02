@@ -6,7 +6,12 @@ pub fn truncate_note(
     db_file: &PathBuf,
 ) -> Result<(), Box<dyn std::error::Error>> {
     for note in &get_notes(db_file)? {
-        let mut truncated_content: String = note.content.chars().take(10).collect();
+        let mut truncated_content: String = note
+            .content
+            .chars()
+            .take(10)
+            .collect::<String>()
+            .replace("\n", " ");
         if truncated_content.chars().count() == 10 {
             truncated_content += "..."; // this is cursed and awesome at the same time
         }
