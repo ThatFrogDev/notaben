@@ -18,5 +18,5 @@ chrono = "0.4.37"
 dialoguer = "0.11.0"
 crossterm = "0.27.0"
 rusqlite = { version = "0.31.0", features = ["bundled"] }
-termimad = "0.29.1"
+termimad = "0.29.2"
 tempfile = "3.10.0"
