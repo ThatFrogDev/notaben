@@ -6,7 +6,7 @@
 Notabena is a free and open source note-taking app, written in pure Rust. [Join our Discord here!](https://discord.gg/htNK4YcJB8)
 
 ## Features
-These are our current planned features. There's going to be a TUI and an app, the features under `Features` are universal
+These are our current planned features. There's going to be a TUI and an app, but the features under `Features` are universal.
 
 - [ ] Features
   - [x] Simple note-taking
@@ -14,19 +14,19 @@ These are our current planned features. There's going to be a TUI and an app, th
   - [x] Simple Markdown support
   - [ ] Export & Share notes
   - [ ] Add tags to notes
+  - [ ] Live-saving notes
   - [ ] Compatibility on the same device (GUI & CLI) and compatibility cross-device by account<br>
-  _NOTE: Currently we have a simple PoC with basic prompts, but we're planning to support CLI flags like `notabena --new`/`-n` but if you run `notabena` you'll get a full-fledged TUI_
+  _NOTE: Currently we have a simple PoC with basic prompts, but we're planning to support CLI flags like `notabena --new`/`-n` but if you run `notabena`, you'll get a full-fledged TUI_
 - [ ] GUI
   - [ ] Custom themes
   - [ ] Private vault: only accessible with PIN
   - [ ] Folders
   - [ ] Multiple note types which will be shown as text in the CLI
-- [ ] Protocol
+- [ ] Notabena Protocol
   	- [ ] Collaboration
-  	- [ ] E2E inspired by the Signal Protocol
-  	- [ ] `.nb` filetype for saving notes encrypted
+  	- [ ] E2EE inspired by the Signal Protocol
+  	- [ ] `.nb` filetype for saving notes (encrypted)
   	- [ ] Passkeys & encryption keys
-nteractive TUI.
 
 ## Help us!
 You can help us in different ways.<br>
