@@ -6,7 +6,7 @@
 Notabena is a free and open source note-taking app, written in pure Rust. [Join our Discord here!](https://discord.gg/htNK4YcJB8)
 
 ## Features
-These are our current planned features. (Most features under CLI are also featured in the GUI when it's released, for the two are planned to be fully compatible)
+These are our current planned features. There's going to be a TUI and an app, the features under `Features` are universal
 
 - [ ] Features
   - [x] Simple note-taking
