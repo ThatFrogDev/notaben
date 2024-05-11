@@ -155,7 +155,7 @@ impl Note {
 
         println!("Content: {}", selected_note.content);
 
-        let mut content = String::new("");
+        let mut content = String::new();
         let mut buffer = String::new();
 
         print!("New Content: ");
