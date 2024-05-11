@@ -36,10 +36,11 @@ pub fn save_note(note: &Note, db_file: &PathBuf) -> Result<()> {
 
 pub fn delete_notes(idx: Vec<usize>, db_file: &PathBuf) -> Result<()> {
     let sqlite = Connection::open(db_file)?;
+
     for identifier in idx {
         sqlite.execute(
             "DELETE FROM saved_notes WHERE id = ?1;",
-            params![&identifier],
+            params![&identifier + 1],
         )?;
     }
 

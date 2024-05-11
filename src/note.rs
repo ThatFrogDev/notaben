@@ -11,6 +11,7 @@ use crate::{
 use async_std::path::PathBuf;
 use chrono::prelude::Local;
 use rusqlite::{params, Connection};
+use std::io::{self, Write};
 
 #[derive(Clone)]
 pub struct Note {
@@ -24,8 +25,8 @@ impl Note {
     pub fn create(db_file: &PathBuf) -> Result<(), Box<dyn std::error::Error>> {
         let sqlite = Connection::open(db_file)?;
 
-        // fetch IDs from database, sort and find the first gap
-        //if it does not exist, use the length of the array + 1
+        // Fetch IDs from database, sort and find the first gap
+        // if it does not exist, use the length of the array + 1
         let mut stmt = sqlite.prepare("SELECT id FROM saved_notes")?;
         let ids: Result<Vec<usize>, _> = stmt.query_map(params![], |row| row.get(0))?.collect();
         let mut ids = ids?;
@@ -39,10 +40,10 @@ impl Note {
 
         cursor_to_origin()?;
         println!(
-        "If you're done inputting a field, you can press Enter twice to continue or save, or Alt/Option-Q to return to the main menu.\n\
-        For the \"Content\" field: to end a paragraph press Space and then Enter. To end your note, press Enter on a second new line.\n\
+        "If you're done inputting a field, you can press Enter to continue or save, \n\
+        For the \"Content\" field: to end a paragraph press Space and then Enter. To end your note, press Enter on a empty new line.\n\
         You can use Markdown to format your notes.\r"
-        );
+    );
 
         let mut name: String;
         loop {
@@ -57,10 +58,25 @@ impl Note {
                 break;
             }
         }
+
+        println!("Content:");
+        let mut content = String::new();
+        loop {
+            let mut buffer = String::new();
+            io::stdin().read_line(&mut buffer)?;
+
+            // If the buffer is empty (only Enter was pressed), we consider it as end of input
+            if buffer.trim().is_empty() {
+                break;
+            }
+
+            content.push_str(&buffer);
+        }
+
         let inputted_note = Note {
             id,
             name,
-            content: multi("Content:", "".to_string())?,
+            content,
             created: format!("{}", Local::now().format("%A %e %B, %H:%M")),
         };
 
@@ -107,26 +123,52 @@ impl Note {
         }
 
         println!(
-            "If you're done editing a field, you can press Enter twice to continue or save, or Alt/Option-Q to return to the main menu.\r"
-        );
+        "If you're done editing a field, you can press Enter on an empty line to continue or save. \r"
+    );
         let mut options: Vec<String> = Vec::new();
         truncate_note(&mut options, db_file)?;
         let selection = select("Select the note that you want to edit:", &options);
         let selected_note = &saved_notes[selection];
+
+        let mut name: String;
+        loop {
+            name = single("Name:", selected_note.name.clone(), true)?;
+            if name.len() > 64 {
+                cursor_to_origin()?;
+                println!(
+                "If you're done inputting a field, you can press Enter twice to continue or save, or Alt/Option-Q to return to the main menu.\n\n\
+                error: The name is too long, it must be 64 characters or less.\r"
+            );
+            } else {
+                break;
+            }
+        }
+
+        println!("{}", selected_note.content);
+
+        println!("New Content:");
+        let mut content = String::new();
+        loop {
+            let mut buffer = String::new();
+            io::stdin().read_line(&mut buffer)?;
+
+            // if nothing typed then break
+            if buffer.trim().is_empty() {
+                break;
+            }
+
+            content.push_str(&buffer);
+        }
+
         let updated_note = Note {
             id: selected_note.id,
-            name: single("Name:", selected_note.name.clone(), true)?,
-            content: multi("Content:", selected_note.content.clone())?,
+            name,
+            content,
             created: selected_note.created.clone(),
         };
 
-        if saved_notes.is_empty() {
-            cursor_to_origin()?;
-            println!("You can't edit notes, because there are none.");
-        }
-
         cursor_to_origin()?;
-        api::save_note(&updated_note, db_file)?; // why the fuck whas this line not here yet
+        api::save_note(&updated_note, db_file)?; // data in my tummy
         println!("Note updated successfully.");
         Ok(())
     }
@@ -157,7 +199,7 @@ impl Note {
             Ok(())
         } else if confirm(prompt) {
             api::delete_notes(selections, db_file)?;
-            cursor_to_origin()?;
+            //cursor_to_origin()?;
             println!("Notes deleted successfully.");
             Ok(())
         } else {
