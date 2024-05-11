@@ -65,7 +65,7 @@ impl Note {
             let mut buffer = String::new();
             io::stdin().read_line(&mut buffer)?;
 
-            // If the buffer is empty (only Enter was pressed), we consider it as end of input
+            // if nothing written then break
             if buffer.trim().is_empty() {
                 break;
             }
@@ -199,7 +199,7 @@ impl Note {
             Ok(())
         } else if confirm(prompt) {
             api::delete_notes(selections, db_file)?;
-            //cursor_to_origin()?;
+            cursor_to_origin()?;
             println!("Notes deleted successfully.");
             Ok(())
         } else {
