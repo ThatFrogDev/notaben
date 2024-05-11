@@ -65,7 +65,6 @@ impl Note {
             let mut buffer = String::new();
             io::stdin().read_line(&mut buffer)?;
 
-            // if nothing written then break
             if buffer.trim().is_empty() {
                 break;
             }
@@ -113,10 +112,13 @@ impl Note {
         Ok(())
     }
 
+    fn clear_line() -> String {
+        "\x1B[2K".to_string()
+    }
+
     pub fn edit(db_file: &PathBuf) -> Result<(), Box<dyn std::error::Error>> {
         cursor_to_origin()?;
         let saved_notes = api::get_notes(db_file)?;
-
         if saved_notes.is_empty() {
             println!("You don't have any notes.");
             return Ok(());
@@ -144,19 +146,30 @@ impl Note {
             }
         }
 
-        println!("{}", selected_note.content);
+        println!("Content: {}", selected_note.content);
 
-        println!("New Content:");
+        // Initial content
+        let mut content = String::from("your Content here");
+        let mut buffer = String::new();
+
+        print!("New Content: ");
+        io::stdout().flush().unwrap();
         let mut content = String::new();
+
         loop {
             let mut buffer = String::new();
             io::stdin().read_line(&mut buffer)?;
 
-            // if nothing typed then break
             if buffer.trim().is_empty() {
-                break;
+                if content.is_empty() {
+                    println!("Content cannot be empty. Please enter the content:");
+                    continue;
+                } else {
+                    break;
+                }
             }
 
+            // Append the buffer to the content
             content.push_str(&buffer);
         }
 
@@ -168,7 +181,7 @@ impl Note {
         };
 
         cursor_to_origin()?;
-        api::save_note(&updated_note, db_file)?; // data in my tummy
+        api::save_note(&updated_note, db_file)?;
         println!("Note updated successfully.");
         Ok(())
     }
