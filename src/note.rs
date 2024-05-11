@@ -59,14 +59,21 @@ impl Note {
             }
         }
 
-        println!("Content:");
+        print!("New Content: ");
+        io::stdout().flush().unwrap();
         let mut content = String::new();
+
         loop {
             let mut buffer = String::new();
             io::stdin().read_line(&mut buffer)?;
 
             if buffer.trim().is_empty() {
-                break;
+                if content.is_empty() {
+                    println!("Content cannot be empty. Please enter the content:");
+                    continue;
+                } else {
+                    break;
+                }
             }
 
             content.push_str(&buffer);
@@ -148,8 +155,7 @@ impl Note {
 
         println!("Content: {}", selected_note.content);
 
-        // Initial content
-        let mut content = String::from("your Content here");
+        let mut content = String::new("");
         let mut buffer = String::new();
 
         print!("New Content: ");
@@ -169,7 +175,6 @@ impl Note {
                 }
             }
 
-            // Append the buffer to the content
             content.push_str(&buffer);
         }
 
